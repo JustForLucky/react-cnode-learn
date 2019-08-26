@@ -1,4 +1,5 @@
 const axios = require('axios')
+const querystring = require('query-string')
 const { baseUrl } = require('./handle-login');
 module.exports = (req, res) => {
   const path = req.path;
@@ -11,16 +12,18 @@ module.exports = (req, res) => {
       msg: 'need login'
     })
   }
-  const query = Object.assign({}, req.query);
+  const query = Object.assign({}, req.query, {
+    accesstoken: (query.needAccessToken && req.method === 'GET') ? user.accessToken : '',
+  });
   if (query.needAccessToken) delete query.needAccessToken;
   axios(`${baseUrl}${path}`, {
     method: req.method,
     params: query,
-    data: Object.assign({}, req.body, {
-      accesstoken: user.accesstoken
-    }),
+    data: querystring.stringify(Object.assign({}, req.body, {
+      accesstoken: (query.needAccessToken && req.method === 'POST') ? user.accessToken : ''
+    })),
     headers: {
-      'Content-Type': 'application/x-www-form-urlencode'
+      'Content-Type': 'application/x-www-form-urlencoded'
     }
   })
     .then(resp => {
