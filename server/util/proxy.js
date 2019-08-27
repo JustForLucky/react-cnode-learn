@@ -6,21 +6,21 @@ module.exports = (req, res) => {
   const user = req.session.user || {};
   const needAccessToken = req.query.needAccessToken;
 
-  if (needAccessToken && !user.needAccessToken) {
-    res.status(401).send({
+  if (needAccessToken && !user.accessToken) {
+    return res.status(401).send({
       success: false,
       msg: 'need login'
     })
   }
   const query = Object.assign({}, req.query, {
-    accesstoken: (query.needAccessToken && req.method === 'GET') ? user.accessToken : '',
+    accesstoken: (needAccessToken && req.method === 'GET') ? user.accessToken : ''
   });
   if (query.needAccessToken) delete query.needAccessToken;
   axios(`${baseUrl}${path}`, {
     method: req.method,
     params: query,
     data: querystring.stringify(Object.assign({}, req.body, {
-      accesstoken: (query.needAccessToken && req.method === 'POST') ? user.accessToken : ''
+      accesstoken:  (needAccessToken && req.method === 'POST') ? user.accessToken : ''
     })),
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded'
