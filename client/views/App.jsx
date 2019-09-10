@@ -5,7 +5,6 @@ import Routes from '../config/router';
 class App extends React.Component {
   componentDidMount() {
     // do something here
-
   }
   render() {
     return [
