@@ -7,6 +7,7 @@ import {
 import Helmet from 'react-helmet';
 import Button from 'material-ui/Button';
 import { AppState } from '../../store/app-state';
+import Container from '../layout/container';
 
 @inject('appState')
 @observer
@@ -32,7 +33,7 @@ class TopicList extends Component {
   }
   render() {
     return (
-      <div>
+      <Container>
         <Helmet>
           <title>This is topic list</title>
           <meta name='description' content='This is description' />
@@ -40,7 +41,7 @@ class TopicList extends Component {
         <Button raised='true' color='primary'>This is a button</Button>
         <input type='text' onChange={this.changeName} />
         <span>{this.props.appState.msg}</span>
-      </div>
+      </Container>
     )
   }
 }
